@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <script src="{{ url_for('static', filename='qrcode.min.js') }}"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        form { margin: 20px auto; width: 300px; }
+        label, input, button { display: block; width: 100%; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h1>QR Code Generator</h1>
+    <form id="qrForm">
+        <label for="poleNo">Pole Number</label>
+        <input type="text" id="poleNo" placeholder="Enter Pole Number" required>
+
+        <label for="poleArea">Pole Area</label>
+        <input type="text" id="poleArea" placeholder="Enter Pole Area" required>
+
+        <label for="poleLocation">Pole Location</label>
+        <input type="text" id="poleLocation" placeholder="Enter Pole Location" required>
+
+        <button type="button" id="generateBtn">Generate QR Code</button>
+    </form>
+    <div id="qrcode"></div>
+
+    <script>
+        document.getElementById('generateBtn').addEventListener('click', () => {
+            const poleNo = document.getElementById('poleNo').value;
+            const poleArea = document.getElementById('poleArea').value;
+            const poleLocation = document.getElementById('poleLocation').value;
+
+            if (!poleNo || !poleArea || !poleLocation) {
+                alert('Please fill all fields');
+                return;
+            }
+
+            const url = `http://100.115.92.14:8080/complaint?poleNo=${encodeURIComponent(poleNo)}&poleArea=${encodeURIComponent(poleArea)}&poleLocation=${encodeURIComponent(poleLocation)}`;
+            
+            document.getElementById('qrcode').innerHTML = '';
+            new QRCode(document.getElementById('qrcode'), { text: url, width: 256, height: 256 });
+        });
+    </script>
+</body>
+</html>
