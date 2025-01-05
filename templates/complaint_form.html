@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Complaint</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        form { margin: 20px auto; width: 300px; }
+        label, input, textarea, button { display: block; width: 100%; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Submit Complaint</h1>
+    <form id="complaintForm" method="POST" enctype="multipart/form-data">
+        <label for="poleDetails">Pole Details</label>
+        <textarea id="poleDetails" readonly>{{ poleNo }} | {{ poleArea }} | {{ poleLocation }}</textarea>
+
+        <label for="issue">Describe the Issue</label>
+        <textarea id="issue" name="issue" placeholder="Enter the issue"></textarea>
+
+        <label for="image">Attach Geotagged Image</label>
+        <input type="file" id="image" name="image" accept="image/*" capture="environment">
+
+        <label for="location">Live Location</label>
+        <input type="text" id="location" name="location" readonly>
+
+        <button type="submit">Submit Complaint</button>
+    </form>
+
+    <script>
+        const locationField = document.getElementById('location');
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                locationField.value = `Lat: ${position.coords.latitude}, Lng: ${position.coords.longitude}`;
+            }, () => {
+                locationField.value = 'Unable to fetch location';
+            });
+        } else {
+            locationField.value = 'Geolocation not supported';
+        }
+    </script>
+</body>
+</html>
